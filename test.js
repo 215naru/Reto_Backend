@@ -33,6 +33,13 @@ describe("Base de Datos E-commerce", () => {
       image: "image",
       stock: 13,
     };
+
+    createProduct(newProduct,(err,id)=>{
+      getProduct(id,(err,product)=>{
+        expect(product.title).toBe(newProduct.title);
+        done();
+      })
+    })
   });
 
   it("Crear un dos productos y llama todos los productos creados", (done) => {
@@ -57,6 +64,15 @@ describe("Base de Datos E-commerce", () => {
       image: "image",
       stock: 13,
     };
+
+    createProduct(newProduct1,(err,id)=>{
+      createProduct(newProduct2,(err,id)=>{
+        getAllProducts((err,data)=>{
+          expect(data.length).toBe(2);
+          done();
+        });
+      });
+    });
   });
 
   it("Crear un dos productos y elimina el segundo producto creado", (done) => {
@@ -81,6 +97,17 @@ describe("Base de Datos E-commerce", () => {
       image: "image",
       stock: 13,
     };
+
+    createProduct(newProduct1, (err,id1)=>{
+      createProduct(newProduct2, (err,id2)=>{
+        deleteProduct(id2,(err,_)=>{
+          getAllProducts((err,data)=>{
+            expect(data.length).toBe(1);
+            done();
+          });
+        });
+      });
+    });
   });
 
   it("Crear un producto y actualiza su información", (done) => {
@@ -103,5 +130,11 @@ describe("Base de Datos E-commerce", () => {
       image: "image",
       stock: 13,
     };
+    createProduct(newProduct,(err,id1)=>{
+      updateProduct(id1, newProductUpdated, (err, product) => {
+        expect(product.title).toBe(newProductUpdated.title);
+        done();
+      });
+    });
   });
 });

@@ -15,8 +15,11 @@ const create = (req, res) => {
   // venir del `request` de la petición y función callback donde realizaremos la respuesta de
   // nuestro controlador.
   const { body } = req;
-  createProduct(..., (error, id) => {
-    ...
+  createProduct(body, (error, id) => {
+    if(error){
+        res.status(501).json(error);
+    }
+    res.status(201).json({ id });
   });
 };
 
@@ -26,6 +29,12 @@ const getAll = (req, res) => {
   // retornarlos con un codigo **200** en caso que la consulta sea exitosa y un codigo **500** si
   // ocurrio un error en la consulta de los productos, al momento de utilizar el modelo `getAllProducts`
   // ten en cuenta que estamos usando funciones callback para obtener el resultado de la consulta.
+  getAllProducts((error, products) => {
+    if(error) {
+      res.status(501).json(error);
+    }
+    res.status(201).json(products);
+  })
 };
 
 const getById = (req, res) => {
@@ -37,8 +46,11 @@ const getById = (req, res) => {
   // que seva a consultar en la DB la cual va a venir en los params del `request` y función callback
   // donde realizaremos la respuesta de nuestro controlador.
   const { params } = req;
-  getProduct(..., (... => {
-    ...
+  getProduct(params.id, (error, product) => {
+    if(error){
+      res.status(501).json(error);
+    }
+    res.status(201).json(error);
   });
 };
 
@@ -50,6 +62,13 @@ const deleteById = (req, res) => {
   // recuerda que dicho modelo espera dos parametros uno es el **id** del producto que se va a eliminar
   // en la DB la cual va a venir en los **params** del `request` y función callback donde realizaremos
   // la respuesta de nuestro controlador.
+  const {params} = req;
+  deleteProduct(params.id,(error, deleteMessage) => {
+    if(error){
+      res.status(501).json(error);
+    }
+    res.status(201).json(deleteMessage);
+  });
 };
 
 const update = (req, res) => {
@@ -60,10 +79,13 @@ const update = (req, res) => {
   // espera tres parametros uno es la información del producto que se va actualizar la cual va a venir
   // en el **body** del `request`, la segunda el **id** del producto la cual va a venir en los **params**
   // del `request` y una función callback donde realizaremos la respuesta de nuestro controlador.
-
+  
   const { body, params } = req;
-  updateProduct(..., ..., (... => {
-    ...
+  updateProduct(params.id, body, (error, product) => {
+    if(error){
+      res.status(501).json(error);
+    }
+    res.status(201).json(product)
   });
 };
 
